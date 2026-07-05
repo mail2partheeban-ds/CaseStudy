@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Revenue — Restoring XO Conversion & Experience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0A0A0C;
+    --paper:   #F0EDE6;
+    --rule:    #222228;
+    --accent:  #F5A623;
+    --accent2: #3D6B8C;
+    --muted:   #5A5A6A;
+    --white:   #FFFFFF;
+    --slide-w: 1100px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; z-index: 600;
+    height: 2px; width: 0%;
+    background: var(--accent);
+    transition: width 0.1s linear;
+    pointer-events: none;
+  }
+
+  /* ── TOP NAV ── */
+  #top-nav {
+    position: fixed; top: 2px; left: 0; right: 0; z-index: 400;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+  }
+  #top-nav .logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase;
+  }
+
+  /* ── DOT NAV — pure right-edge strip, 24px wide, never touches content ── */
+  #dot-nav {
+    position: fixed;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 24px;        /* absolute max width of this nav */
+  }
+  .dot-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
+  }
+  .dot-wrap.active .dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.55);
+    box-shadow: 0 0 8px rgba(245,166,35,0.55);
+  }
+  .dot-wrap:hover .dot {
+    background: var(--white);
+    border-color: var(--white);
+  }
+
+  /* Tooltip: position:fixed via JS, completely detached from nav layout */
+  #dot-tip {
+    position: fixed;
+    z-index: 501;
+    right: 46px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--paper);
+    background: rgba(10,10,12,0.9);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.14s;
+    transform: translateY(-50%);
+  }
+  #dot-tip.show { opacity: 1; }
+
+  /* ── SLIDE ── */
+  .slide {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 108px clamp(18px, 5vw, 56px) 64px;
+    position: relative; overflow: hidden;
+  }
+  .slide-inner {
+    width: 100%; max-width: var(--slide-w);
+    position: relative; z-index: 2;
+  }
+  .slide-alt  { background: #0E0E12; }
+  .slide-dark { background: #060609; }
+
+  /* ── EYEBROW ── */
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.24em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .eyebrow::after { content:''; flex: 0 0 36px; height: 1px; background: var(--accent); opacity: 0.4; }
+
+  /* ── HEADINGS — Bebas Neue ── */
+  .cover-title, .section-title, .card-title, .pillar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400; letter-spacing: 0.04em;
+    line-height: 0.95; text-transform: uppercase; color: var(--white);
+  }
+  .cover-title   { font-size: clamp(72px, 9vw, 118px); margin-bottom: 20px; }
+  .section-title { font-size: clamp(44px, 5.5vw, 70px); margin-bottom: 10px; }
+  .card-title    { font-size: 21px; margin-bottom: 10px; }
+  .pillar-title  { font-size: 23px; margin-bottom: 10px; }
+  .accent        { color: var(--accent); }
+
+  /* ── COVER ── */
+  #cover { background: var(--ink); border-bottom: 1px solid var(--rule); }
+  #cover::before {
+    content:''; position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(ellipse 55% 65% at 85% 35%, rgba(245,166,35,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 10% 80%, rgba(61,107,140,0.05) 0%, transparent 60%);
+  }
+  .cover-rule { width: 1px; height: 72px; background: var(--accent); margin-bottom: 28px; opacity: 0.5; }
+  .cover-sub  { font-size: 15px; color: var(--muted); font-weight: 300; margin-bottom: 44px; max-width: 460px; line-height: 1.65; }
+  .cover-meta { display: flex; gap: 44px; flex-wrap: wrap; }
+  .cover-meta-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; }
+  .cover-meta-value { font-size: 14px; color: var(--paper); font-weight: 400; }
+
+  .section-desc { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.7; max-width: 560px; margin-bottom: 38px; }
+
+  /* ── LAYOUT ── */
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px; }
+  @media (max-width: 800px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* ── CARD ── */
+  .card { border: 1px solid var(--rule); padding: 26px; background: rgba(255,255,255,0.02); transition: border-color 0.2s, background 0.2s; }
+  .card:hover { border-color: rgba(245,166,35,0.25); background: rgba(245,166,35,0.025); }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  .card-body  { font-size: 14px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+  /* ── BULLET LIST ── */
+  .blist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .blist li { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; padding-left: 18px; position: relative; }
+  .blist li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 11px; }
+
+  /* ── METRICS ── */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); margin-bottom: 40px; }
+  @media (max-width: 700px) { .metrics { grid-template-columns: 1fr 1fr; } }
+  .metric-cell { background: #0A0A0C; padding: 40px 20px; text-align: center; position: relative; transition: background 0.2s; }
+  .metric-cell:hover { background: #101014; }
+  .metric-cell::before { content:''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 36px; height: 2px; background: var(--accent); }
+  .metric-num  { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,4.5vw,62px); letter-spacing: 0.03em; color: var(--white); display: block; margin-bottom: 6px; line-height: 1; }
+  .metric-num .accent { color: var(--accent); }
+  .metric-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; }
+  .metric-sub { font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 300; }
+
+  /* ── PILLAR ── */
+  .pillar { border-left: 2px solid var(--accent); padding-left: 22px; }
+  .pillar-num  { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 6px; }
+  .pillar-body { font-size: 14px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+  /* ── INSIGHT GRID ── */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 32px; }
+  @media (max-width: 700px) { .insight-grid { grid-template-columns: 1fr; } }
+  .insight-item { padding: 20px 22px; border: 1px solid var(--rule); background: rgba(61,107,140,0.05); border-left: 3px solid var(--accent2); }
+  .insight-item p { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+  /* ── QUOTE BAR ── */
+  .quote-bar { border-left: 3px solid var(--accent); padding: 18px 24px; background: rgba(245,166,35,0.05); margin: 28px 0; }
+  .quote-bar p { font-style: italic; font-size: 16px; color: var(--paper); line-height: 1.6; font-weight: 300; }
+
+  /* ── TAGS ── */
+  .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent2); border: 1px solid var(--accent2); padding: 3px 9px; margin-right: 6px; margin-bottom: 6px; }
+
+  /* ── MISC ── */
+  hr.divider { border: none; border-top: 1px solid var(--rule); margin: 30px 0; }
+  .bg-ghost { position: absolute; right: -10px; bottom: -40px; z-index: 0; font-family: 'Bebas Neue', sans-serif; font-size: 220px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.018); line-height: 1; pointer-events: none; user-select: none; }
+
+  /* ── SCROLL HINT ── */
+  .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 3; }
+  .scroll-hint::after { content:''; width: 1px; height: 28px; background: var(--muted); opacity: 0.35; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.15} 50%{opacity:0.6} }
+
+  /* ── FOOTER ── */
+  footer { padding: 28px 48px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  footer p { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.12em; }
+
+  /* ── KEYFRAMES ── */
+  @keyframes pulse      { 0%,100%{opacity:0.15} 50%{opacity:0.6} }
+  @keyframes fadeUp     { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes lineGrow   { from{width:0;opacity:0} to{opacity:0.4} }
+  @keyframes barGrow    { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+  @keyframes countUp    { from{opacity:0;transform:translateY(10px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes dotPop     { 0%{transform:scale(1)} 50%{transform:scale(1.9)} 100%{transform:scale(1.55)} }
+  @keyframes shimmer    { 0%,100%{opacity:0.018} 50%{opacity:0.04} }
+  @keyframes ruleDown   { from{height:0;opacity:0} to{opacity:0.5} }
+
+  /* ── FADE IN + STAGGERED CHILDREN ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .slide-inner {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+    }
+    .slide-inner.visible { opacity:1; transform:translateY(0); }
+
+    /* Staggered entry */
+    .slide-inner.visible .eyebrow       { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+    .slide-inner.visible .cover-title   { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s  both; }
+    .slide-inner.visible .section-title { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
+    .slide-inner.visible .cover-sub     { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s  both; }
+    .slide-inner.visible .section-desc  { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s  both; }
+    .slide-inner.visible .cover-meta    { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .cover-rule    { animation: ruleDown 0.5s cubic-bezier(0.22,1,0.36,1) 0.0s both; }
+    .slide-inner.visible .two-col       { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .three-col     { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .insight-grid  { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.3s  both; }
+    .slide-inner.visible .pillar        { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.36s both; }
+    .slide-inner.visible .quote-bar     { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+    .slide-inner.visible .metrics       { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.3s  both; }
+    .slide-inner.visible .metric-num    { animation: countUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.45s both; }
+    .slide-inner.visible .bg-ghost      { animation: shimmer 7s ease-in-out infinite; }
+    .slide-inner.visible .eyebrow::after { animation: lineGrow 0.6s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    .slide-inner.visible .metric-cell::before { animation: barGrow 0.5s cubic-bezier(0.22,1,0.36,1) 0.42s both; transform-origin: left; }
+
+    /* Card stagger */
+    .slide-inner.visible .card:nth-child(1) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .card:nth-child(2) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.36s both; }
+    .slide-inner.visible .card:nth-child(3) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.44s both; }
+
+    /* Dot pop */
+    .dot-wrap.active .dot { animation: dotPop 0.3s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* Progress bar leading glow */
+    #progress-bar::after { content:''; position:absolute; right:0; top:0; width:60px; height:2px; background:linear-gradient(to left, rgba(255,255,255,0.55), transparent); pointer-events:none; }
+
+    /* Hover lifts */
+    .card { transition: border-color 0.22s, background 0.22s, transform 0.22s, box-shadow 0.22s; }
+    .card:hover { border-color:rgba(245,166,35,0.3); background:rgba(245,166,35,0.03); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.35); }
+    .insight-item { transition: transform 0.2s, background 0.2s; }
+    .insight-item:hover { transform:translateY(-2px); background:rgba(61,107,140,0.09); }
+    .pillar { transition: border-color 0.22s; }
+    .pillar:hover { border-color: var(--accent); }
+    .metric-cell { transition: background 0.2s; }
+    .metric-cell:hover { background: #111116; }
+    .dot { transition: background 0.25s, transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s; }
+    .scroll-hint::after { animation: pulse 2.2s ease-in-out infinite; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — TABLET (≤ 900px)
+  ══════════════════════════════════════ */
+  @media (max-width: 900px) {
+    #top-nav { padding: 13px 20px; }
+    #top-nav span:last-child { display: none; }
+    .slide { padding: 90px 28px 52px; }
+    .cover-meta { gap: 20px; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — MOBILE (≤ 600px)
+  ══════════════════════════════════════ */
+  @media (max-width: 600px) {
+    :root { --slide-w: 100%; }
+
+    /* Nav */
+    #top-nav { padding: 12px 16px; }
+    #dot-nav { right: 6px; gap: 10px; }
+    .dot { width: 5px; height: 5px; }
+    #dot-tip { display: none; }
+
+    /* Slide shell */
+    .slide { padding: 78px 18px 44px; min-height: auto; }
+    footer { padding: 18px 18px; flex-direction: column; align-items: flex-start; gap: 6px; }
+
+    /* Typography */
+    .eyebrow { font-size: 9px; letter-spacing: 0.14em; }
+    .section-desc { font-size: 13px; margin-bottom: 22px; }
+    .card-body, .pillar-body, .blist li, .insight-item p { font-size: 13px; }
+    .quote-bar p { font-size: 14px; }
+    .card-title { font-size: 17px; }
+    .pillar-title { font-size: 19px; }
+    .cover-sub { font-size: 13px; margin-bottom: 28px; }
+
+    /* Layouts → single col */
+    .two-col   { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .three-col { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .metrics   { grid-template-columns: 1fr 1fr !important; }
+    .insight-grid { grid-template-columns: 1fr !important; }
+
+    /* About slide identity bar → stack */
+    .about-identity { flex-direction: column !important; gap: 20px !important; }
+    .about-cols { grid-template-columns: 1fr !important; gap: 0 !important; }
+    .about-cols > div { border-bottom: 1px solid var(--rule); }
+    .about-cols > div:last-child { border-bottom: none; }
+
+    /* Cover meta → stack */
+    .cover-meta { flex-direction: column; gap: 16px; }
+
+    /* Metric cells */
+    .metric-cell { padding: 28px 14px; }
+
+    /* PXR conditions grid → single col */
+    .pxr-grid { grid-template-columns: 1fr !important; }
+
+    /* Inline three-col about grid */
+    [style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns: 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+    /* Inline two-col flex rows in about → stack */
+    [style*="display:flex; gap:28px; flex-wrap:wrap"] { flex-direction: column; gap: 10px !important; }
+    [style*="display:flex; gap:40px;"] { flex-direction: column !important; gap: 20px !important; }
+
+    /* PXR formula bar → stack */
+    [style*="display:flex;align-items:center;gap:0;border:1px solid var(--rule)"] { flex-direction: column !important; }
+    [style*="display:flex; align-items:center; gap:28px; border:1px solid var(--accent)"] { flex-direction: column !important; gap: 14px !important; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — VERY SMALL (≤ 380px)
+  ══════════════════════════════════════ */
+  @media (max-width: 380px) {
+    #dot-nav { display: none; }
+    .slide { padding: 70px 14px 36px; }
+    .metrics { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- TOP NAV: logo only — section nav lives in dots on the right -->
+<nav id="top-nav">
+  <span class="logo">Portfolio · XO Conversion</span>
+  <span class="logo" style="color:var(--muted); font-size:9px;">Sr. Manager, Data Science</span>
+</nav>
+
+<!-- DOT NAV: 24px strip, far right edge, no labels in DOM -->
+<div id="dot-nav">
+  <a class="dot-wrap" href="#about"      data-label="About Me"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#cover"      data-label="Intro"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#context"    data-label="Context"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#strategy"   data-label="Strategy"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#objective"  data-label="Objective"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#analytical" data-label="Analysis"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#dsinsights" data-label="Insights"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#pxr"       data-label="PXR"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#execution"  data-label="Execution"><span class="dot"></span></a>
+  <a class="dot-wrap" href="#results"    data-label="Results"><span class="dot"></span></a>
+</div>
+
+<!-- TOOLTIP: single shared element, positioned by JS, never inside the nav -->
+<div id="dot-tip"></div>
+
+
+<!-- SLIDE 0 — ABOUT ME -->
+<section class="slide" id="about" style="background:var(--ink); border-bottom:1px solid var(--rule);">
+  <div class="slide-inner">
+
+    <!-- top identity bar -->
+    <div class="about-identity" style="display:flex; align-items:flex-start; gap:40px; margin-bottom:44px; padding-bottom:36px; border-bottom:1px solid var(--rule);">
+      <!-- avatar placeholder with initials -->
+      <div style="flex-shrink:0; width:72px; height:72px; border-radius:50%; background:rgba(245,166,35,0.1); border:1px solid rgba(245,166,35,0.3); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.06em; color:var(--accent);">PP</span>
+      </div>
+      <div style="flex:1;">
+        <div class="eyebrow" style="margin-bottom:10px;">About Me &nbsp;·&nbsp; <span style="color:var(--paper); letter-spacing:0.1em;">Partheeban Prabhakaran</span></div>
+        <h2 class="section-title" style="font-size:clamp(36px,4.5vw,58px); margin-bottom:10px;">Data Science Leader<br><span class="accent">Passionate About Impact</span></h2>
+        <div style="display:flex; gap:28px; flex-wrap:wrap; margin-top:14px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="width:4px; height:4px; border-radius:50%; background:var(--accent); flex-shrink:0;"></span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase;">Sr. Manager, Data Science &nbsp;·&nbsp; PayPal</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="width:4px; height:4px; border-radius:50%; background:var(--accent); flex-shrink:0;"></span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase;">18+ Years Experience</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="width:4px; height:4px; border-radius:50%; background:var(--accent); flex-shrink:0;"></span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase;">Fremont, California</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- three-column content -->
+    <div class="about-cols" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule); margin-bottom:1px;">
+
+      <!-- WHAT DRIVES ME -->
+      <div style="background:var(--ink); padding:28px 26px;">
+        <div class="card-label" style="margin-bottom:18px; display:flex; align-items:center; gap:10px;">
+          What Drives Me
+          <span style="flex:1; height:1px; background:var(--rule);"></span>
+        </div>
+        <ul class="blist">
+          <li>Turning data into product decisions that move the needle on customer experience and business outcomes</li>
+          <li>Solving complex payment and checkout problems with experimentation and analytics</li>
+          <li>Building scalable metrics, frameworks, and insights platforms</li>
+          <li>Leading cross-functional impact across Product, Engineering, Finance, and GTM</li>
+          <li>Growing and mentoring high-performing data science teams</li>
+        </ul>
+      </div>
+
+      <!-- WHAT I'M MOST PASSIONATE ABOUT -->
+      <div style="background:#0E0E12; padding:28px 26px;">
+        <div class="card-label" style="margin-bottom:18px; display:flex; align-items:center; gap:10px;">
+          What I&rsquo;m Passionate About
+          <span style="flex:1; height:1px; background:var(--rule);"></span>
+        </div>
+        <ul class="blist">
+          <li>Making data <strong style="color:var(--paper); font-weight:400;">actionable</strong>, not just descriptive</li>
+          <li>Applying experimentation and causal thinking to drive clarity in ambiguous decisions</li>
+          <li>Building simple, elegant solutions for complex business problems</li>
+          <li>Exploring AI-driven personalization and the future of intelligent checkout systems</li>
+        </ul>
+      </div>
+
+      <!-- OUTSIDE OF WORK -->
+      <div style="background:var(--ink); padding:28px 26px;">
+        <div class="card-label" style="margin-bottom:18px; display:flex; align-items:center; gap:10px;">
+          Outside of Work
+          <span style="flex:1; height:1px; background:var(--rule);"></span>
+        </div>
+        <ul class="blist">
+          <li>Family time with kids and community involvement</li>
+          <li>Photography — storytelling through people and nature</li>
+
+        </ul>
+        <div style="margin-top:24px; padding:14px 18px; border:1px solid rgba(245,166,35,0.2); background:rgba(245,166,35,0.04);">
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:6px;">Expertise Domains</div>
+          <div>
+            <span class="tag">Product Analytics</span>
+            <span class="tag">Payments</span>
+            <span class="tag">Experimentation</span>
+            <span class="tag">Checkout</span>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- SLIDE 1 — COVER -->
+<section class="slide" id="cover">
+  <div class="slide-inner">
+    <div class="cover-rule"></div>
+    <div class="eyebrow">Portfolio of Work</div>
+    <h1 class="cover-title">Drive Revenue<br>by Restoring <span class="accent">Conversion</span><br>&amp; High-Performance<br><span class="accent">XO</span> Experience</h1>
+    <p class="cover-sub">A Data Science–led initiative to deliver consistent, high-performance checkout — diagnosing conversion decline, eliminating friction, and building a revenue-backed experimentation roadmap.</p>
+    <div class="cover-meta">
+      <div><div class="cover-meta-label">Role</div><div class="cover-meta-value">Sr. Manager, Data Science — Checkout</div></div>
+      <div><div class="cover-meta-label">Revenue Scope</div><div class="cover-meta-value">~$12B · ~50% of PayPal Revenue</div></div>
+      <div><div class="cover-meta-label">Conversion Scale</div><div class="cover-meta-value">1% lift ≈ $120M annually</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- SLIDE 2 — CONTEXT -->
+<section class="slide slide-alt" id="context">
+  <div class="slide-inner">
+    <div class="bg-ghost">XO</div>
+    <div class="eyebrow">What Was Happening</div>
+    <h2 class="section-title">A Platform Under <span class="accent">Pressure</span></h2>
+    <p class="section-desc">Checkout conversion was declining year-over-year while competitive alternatives eroded PayPal's share. The problems were systemic — not isolated.</p>
+    <div class="two-col">
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Business Signals</div>
+        <ul class="blist">
+          <li>XO conversion trending down year-over-year</li>
+          <li>Inconsistent checkout experiences across merchants</li>
+          <li>Losing share of checkout to competitors</li>
+          <li>Mobile experiences significantly under-optimized</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Platform Symptoms</div>
+        <ul class="blist">
+          <li>Significant latency issues degrading funnel performance</li>
+          <li>Login friction caused by webview cookie stickiness</li>
+          <li>High ASP transactions disproportionately impacted</li>
+          <li>No unified experimentation roadmap to guide fixes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 — STRATEGY -->
+<section class="slide slide-dark" id="strategy">
+  <div class="slide-inner">
+    <div class="eyebrow">Why This Initiative</div>
+    <h2 class="section-title">Elevated to <span class="accent">#1</span> Company Priority</h2>
+    <div class="two-col">
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Why I Selected This</div>
+        <ul class="blist">
+          <li>Material revenue exposure at scale warranted executive attention</li>
+          <li>Required architectural and cross-functional change</li>
+          <li>Needed standardization across merchants and integrations</li>
+          <li>Disciplined experimentation essential to deliver true impact</li>
+        </ul>
+        <div class="quote-bar"><p>"Majority of prioritization and insights originated from my Data Science team."</p></div>
+      </div>
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Leadership Perspective</div>
+        <ul class="blist">
+          <li>Systemic platform issue — not isolated UX friction</li>
+          <li>Required performance, flexibility, and integration reform</li>
+          <li>Data Science guided decisions based on measurable impact</li>
+        </ul>
+        <hr class="divider">
+        <div class="card-label" style="margin-bottom:12px;">Scope</div>
+        <span class="tag">Performance</span><span class="tag">Experimentation</span><span class="tag">Cross-functional</span><span class="tag">Architecture</span><span class="tag">Monetization</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 — XO OPTIMIZATION APPROACH -->
+<section class="slide slide-alt" id="objective">
+  <div class="slide-inner">
+    <div class="eyebrow">Optimizing XO Experience</div>
+    <h2 class="section-title">Two-Pronged <span class="accent">Approach</span></h2>
+    <p class="section-desc">Delivering a consistent, high-performance checkout experience required parallel tracks — one rearchitecting the platform, one unlocking the mobile channel.</p>
+
+    <div class="two-col" style="gap:32px; margin-bottom:40px;">
+
+      <!-- XO REDESIGN -->
+      <div style="border:1px solid var(--rule); background:rgba(255,255,255,0.02); overflow:hidden;">
+        <div style="background:rgba(245,166,35,0.08); border-bottom:1px solid var(--rule); padding:20px 28px 16px;">
+          <div class="card-label" style="margin-bottom:6px;">Track 01 &middot; Web &amp; Mobile</div>
+          <div class="card-title" style="font-size:26px;">XO Redesign</div>
+        </div>
+        <div style="padding:24px 28px;">
+          <div style="margin-bottom:20px;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+              Engineering Re-architecture
+              <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
+            </div>
+            <ul class="blist">
+              <li>Rearchitected engineering components to reduce latency end-to-end</li>
+              <li>Transitioned key flows from client-side to server-side rendering</li>
+              <li>Standardized integration behavior across all merchant types</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+              UX Experience Redesign
+              <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
+            </div>
+            <ul class="blist">
+              <li>Redesigned checkout flows for better payment discoverability</li>
+              <li>Delivered consistent experience across web and mobile surfaces</li>
+              <li>Validated all UX changes through controlled A/B experimentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPSWITCH -->
+      <div style="border:1px solid var(--rule); background:rgba(255,255,255,0.02); overflow:hidden;">
+        <div style="background:rgba(61,107,140,0.1); border-bottom:1px solid var(--rule); padding:20px 28px 16px;">
+          <div class="card-label" style="margin-bottom:6px; color:var(--accent2);">Track 02 &middot; Mobile Channel</div>
+          <div class="card-title" style="font-size:26px;">AppSwitch</div>
+        </div>
+        <div style="padding:24px 28px;">
+          <div style="margin-bottom:20px;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+              Seamless Authentication
+              <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
+            </div>
+            <ul class="blist">
+              <li>Authenticates the consumer directly from the PayPal App</li>
+              <li>Eliminates webview login friction and cookie-based drop-offs</li>
+              <li>Seamlessly returns the consumer to merchant to complete checkout</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+              Mobile Channel Impact
+              <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
+            </div>
+            <ul class="blist">
+              <li>Unlocks the highest-intent mobile consumer segment</li>
+              <li>Eliminates the primary conversion suppressor on Android</li>
+              <li>Drives conversion lift where competitors were gaining share</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="border:1px solid var(--rule);padding:16px 28px;background:rgba(255,255,255,0.015);display:flex;align-items:center;gap:20px;">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Combined Goal</span>
+      <span style="width:1px;height:20px;background:var(--rule);flex-shrink:0;"></span>
+      <span style="font-size:14px;color:var(--paper);font-weight:300;">A consistent, low-friction, high-performance checkout experience &mdash; across every surface and every channel</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 — ANALYTICAL -->
+<section class="slide slide-dark" id="analytical">
+  <div class="slide-inner">
+    <div class="eyebrow">Analytical Approach</div>
+    <h2 class="section-title">Understanding Conversion and <span class="accent">Revenue Drivers</span></h2>
+    <div class="two-col">
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Analytical Method</div>
+        <ul class="blist">
+          <li>Deep funnel decomposition by device, region, and ASP</li>
+          <li>Isolated latency and login friction impact across flows</li>
+          <li>Diagnosed high ASP drop-offs due to affordability &amp; flexibility gaps</li>
+          <li>Translated findings into quantified revenue opportunity</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card-label" style="margin-bottom:18px;">Structural Gaps Found</div>
+        <ul class="blist">
+          <li>No unified experimentation roadmap existed</li>
+          <li>Limited P95 latency visibility across integrations</li>
+          <li>Inconsistent integration performance benchmarks</li>
+          <li>No framework linking ASP behavior to payment option availability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 — DS INSIGHTS -->
+<section class="slide slide-alt" id="dsinsights">
+  <div class="slide-inner">
+    <div class="eyebrow">Data Science Insights</div>
+    <h2 class="section-title">Prioritization <span class="accent">Rooted in Data</span></h2>
+    <p class="section-desc">Key insights that drove the prioritization framework and operating model shift.</p>
+    <div class="insight-grid">
+      <div class="insight-item"><p>Android + EU/RoW latency was the <strong style="color:var(--paper)">primary performance suppressor</strong> across the checkout funnel.</p></div>
+      <div class="insight-item"><p>Login friction driven by <strong style="color:var(--paper)">webview cookie stickiness</strong> — a solvable architectural issue.</p></div>
+      <div class="insight-item"><p>High ASP drop-offs driven by <strong style="color:var(--paper)">affordability gaps and payment flexibility</strong> — not price sensitivity.</p></div>
+      <div class="insight-item"><p>Integration variability <strong style="color:var(--paper)">amplified experience inconsistency</strong> across the merchant base.</p></div>
+    </div>
+    <div class="two-col">
+      <div class="pillar">
+        <div class="pillar-num">Prioritization</div>
+        <div class="pillar-title">Revenue-Weighted Roadmap</div>
+        <div class="pillar-body">Sequenced fixes by quantified impact and elasticity. Closed measurement gaps across integrations. 1% conversion ≈ $120M annually anchored every decision.</div>
+      </div>
+      <div class="pillar" style="border-color:var(--accent2)">
+        <div class="pillar-num">Operating Model</div>
+        <div class="pillar-title">Daily DS-Led War Rooms</div>
+        <div class="pillar-body">Structured readouts, root cause governance, and risk mitigation before scaled rollout. Shifted from reactive debugging to proactive experimentation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 — PXR -->
+<section class="slide slide-dark" id="pxr">
+  <div class="slide-inner">
+    <div class="eyebrow">New Metric · Measurement Framework</div>
+    <h2 class="section-title">Perfect <span class="accent">XO</span> Rate</h2>
+    <p class="section-desc">A checkout session is <strong style="color:var(--paper); font-weight:400;">Perfect XO</strong> only when all five conditions are met simultaneously — designed to capture the full quality of the checkout experience, not just conversion.</p>
+
+    <!-- PXR definition block -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); margin-bottom:32px;">
+
+      <div style="background:#060609; padding:28px 30px; position:relative;">
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Condition 01</div>
+        <div class="card-title" style="font-size:19px;margin-bottom:8px;">Latest Paysheet Served</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;">Consumer sees the most current, personalized payment sheet — no stale renders, no degraded integrations.</div>
+      </div>
+
+      <div style="background:#060609; padding:28px 30px; position:relative;">
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Condition 02</div>
+        <div class="card-title" style="font-size:19px;margin-bottom:8px;">Frictionless Login Path</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;">Consumer bypasses the login step entirely via a frictionless authentication path — no webview, no re-entry.</div>
+      </div>
+
+      <div style="background:#060609; padding:28px 30px; position:relative;">
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Condition 03</div>
+        <div class="card-title" style="font-size:19px;margin-bottom:8px;">Transaction Completed</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;">Consumer successfully completes the purchase — the ultimate outcome that ties experience quality to revenue.</div>
+      </div>
+
+      <div style="background:#060609; padding:28px 30px; position:relative;">
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Condition 04</div>
+        <div class="card-title" style="font-size:19px;margin-bottom:8px;">Sub-Threshold Latency</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;">Every step in the checkout flow loads within defined performance thresholds — no degraded page, no timeout at any stage.</div>
+      </div>
+
+    </div>
+
+    <!-- Condition 05 — full width, hero treatment -->
+    <div style="border:1px solid var(--accent); background:rgba(245,166,35,0.04); padding:24px 30px; display:flex; align-items:center; gap:28px; margin-bottom:32px;">
+      <div style="flex-shrink:0;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--accent);letter-spacing:0.04em;">05</div>
+      </div>
+      <div style="width:1px;height:52px;background:rgba(245,166,35,0.3);flex-shrink:0;"></div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Condition 05 · The Zero-Deviation Standard</div>
+        <div class="card-title" style="font-size:22px;margin-bottom:8px;">Zero Deviations on the Checkout Flow</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;max-width:680px;">No unexpected redirects, no error states, no fallback paths, no payment option gaps. The consumer moves through checkout exactly as designed — start to finish.</div>
+      </div>
+    </div>
+
+    <!-- PXR formula -->
+    <div style="display:flex;align-items:center;gap:0;border:1px solid var(--rule);overflow:hidden;">
+      <div style="background:rgba(245,166,35,0.08);padding:14px 24px;border-right:1px solid var(--rule);flex-shrink:0;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.06em;color:var(--accent);">PXR</span>
+      </div>
+      <div style="padding:14px 24px;border-right:1px solid var(--rule);flex-shrink:0;">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">=</span>
+      </div>
+      <div style="padding:14px 24px;flex:1;">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--paper);letter-spacing:0.06em;">Sessions meeting ALL 5 conditions &nbsp;/&nbsp; Total XO Sessions</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.02);padding:14px 24px;border-left:1px solid var(--rule);flex-shrink:0;">
+        <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);">North Star Metric</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SLIDE 7 — EXECUTION -->
+<section class="slide slide-dark" id="execution">
+  <div class="slide-inner">
+    <div class="eyebrow">Platform Modernization</div>
+    <h2 class="section-title">Three <span class="accent">Execution Pillars</span></h2>
+    <div class="three-col">
+      <div class="card">
+        <div class="card-label">01 · Performance</div>
+        <div class="card-title">Architecture &amp; Latency</div>
+        <div class="card-body">Partnered with Engineering to reduce latency drivers. Transitioned key flows from client-side to server-side rendering. Embedded performance tracking directly into the experimentation framework.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">02 · Experience</div>
+        <div class="card-title">Consistency Across Merchants</div>
+        <div class="card-body">Standardized XO behavior across merchants and integration types. Reduced login and rendering variability. Experiments surfaced edge cases before scaling to the full merchant base.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">03 · Monetization</div>
+        <div class="card-title">Affordability &amp; BNPL</div>
+        <div class="card-body">Leveraged Buy Now Pay Later to improve high ASP conversion rates. Validated incrementality through controlled experimentation — not assumptions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 — RESULTS -->
+<section class="slide" id="results">
+  <div class="slide-inner">
+    <div class="eyebrow">Outcomes</div>
+    <h2 class="section-title">~$50M Annualized Revenue <span class="accent">Delivered</span></h2>
+    <p class="section-desc">Statistically validated gains across conversion, performance, and monetization dimensions.</p>
+    <div class="metrics">
+      <div class="metric-cell"><span class="metric-num"><span class="accent">+200</span> bps</span><span class="metric-label">Vaulting Conversion Lift</span></div>
+      <div class="metric-cell"><span class="metric-num"><span class="accent">+65</span> bps</span><span class="metric-label">One-Time XO Conversion</span></div>
+      <div class="metric-cell"><span class="metric-num"><span class="accent">+20</span>%</span><span class="metric-label">BNPL Attach Rate</span><div class="metric-sub">High ASP incremental growth</div></div>
+      <div class="metric-cell"><span class="metric-num"><span class="accent">62</span>%</span><span class="metric-label">Latency Reduction</span><div class="metric-sub">Android + EU/RoW primary drivers</div></div>
+    </div>
+    <div class="three-col">
+      <div><div class="card-label" style="margin-bottom:10px;">Strategic Impact</div><ul class="blist"><li>Positioned Data Science as a strategic growth partner</li></ul></div>
+      <div><div class="card-label" style="margin-bottom:10px;">Cultural Impact</div><ul class="blist"><li>Shifted from reactive debugging to proactive experimentation</li></ul></div>
+      <div><div class="card-label" style="margin-bottom:10px;">Organizational Impact</div><ul class="blist"><li>Initiative elevated to #1 company priority by executive leadership</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Portfolio of Work — Checkout Conversion</p>
+  <p>Sr. Manager, Data Science · PayPal Checkout</p>
+</footer>
+
+<script>
+  /* ── PROGRESS BAR ── */
+  const bar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ── DOT NAV — scale gap when viewport too short for all dots ── */
+  function scaleDotNav() {
+    const nav = document.getElementById('dot-nav');
+    if (!nav) return;
+    const wraps = nav.querySelectorAll('.dot-wrap');
+    const vh = window.innerHeight;
+    const total = wraps.length * 24 + (wraps.length - 1) * 20;
+    if (total > vh * 0.82) {
+      const gap = Math.max(4, Math.floor((vh * 0.82 - wraps.length * 16) / (wraps.length - 1)));
+      nav.style.gap = gap + 'px';
+      wraps.forEach(w => { w.style.width = '16px'; w.style.height = '16px'; });
+    } else {
+      nav.style.gap = '';
+      wraps.forEach(w => { w.style.width = ''; w.style.height = ''; });
+    }
+  }
+  scaleDotNav();
+  window.addEventListener('resize', scaleDotNav, { passive: true });
+
+  /* ── DOT NAV — tooltip + active ── */
+  const dots    = Array.from(document.querySelectorAll('.dot-wrap'));
+  const tip     = document.getElementById('dot-tip');
+  const sections = Array.from(document.querySelectorAll('section[id]'));
+
+  dots.forEach(d => {
+    d.addEventListener('mouseenter', () => {
+      if (!tip) return;
+      const rect = d.getBoundingClientRect();
+      tip.textContent = d.dataset.label;
+      tip.style.top = (rect.top + rect.height / 2) + 'px';
+      tip.classList.add('show');
+    });
+    d.addEventListener('mouseleave', () => tip && tip.classList.remove('show'));
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting)
+        dots.forEach(d => d.classList.toggle('active', d.getAttribute('href') === '#' + e.target.id));
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => obs.observe(s));
+
+  /* ── FADE IN ── */
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.slide-inner').forEach(el => fadeObs.observe(el));
+
+  /* ── SMOOTH SCROLL on touch ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>

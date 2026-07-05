@@ -29,7 +29,7 @@
   /* TOP NAV */
   #top-nav { position: fixed; top: 2px; left: 0; right: 0; z-index: 400; display: flex; align-items: center; justify-content: space-between; padding: 15px 48px; background: rgba(10,10,12,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); }
   #top-nav .logo { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; }
-  #top-nav .sub  { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted); }
+  #top-nav .sub  { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 
   /* PART BADGE in nav */
   .part-badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 10px; border: 1px solid; }
@@ -47,7 +47,7 @@
   #dot-tip.show { opacity: 1; }
 
   /* SLIDE */
-  .slide { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 108px 56px 64px; position: relative; overflow: hidden; }
+  .slide { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 108px clamp(18px, 5vw, 56px) 64px; position: relative; overflow: hidden; }
   .slide-inner { width: 100%; max-width: var(--slide-w); position: relative; z-index: 2; }
   .slide-alt  { background: #0E0E12; }
   .slide-dark { background: #060609; }
@@ -81,7 +81,7 @@
   #cover::before { content:''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 55% 65% at 85% 35%, rgba(245,166,35,0.06) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 10% 80%, rgba(61,107,140,0.05) 0%, transparent 60%); }
   .cover-rule { width: 1px; height: 64px; background: var(--accent); margin-bottom: 24px; opacity: 0.5; }
   .cover-sub  { font-size: 15px; color: var(--muted); font-weight: 300; margin-bottom: 40px; max-width: 560px; line-height: 1.65; }
-  .cover-meta { display: flex; gap: 0; flex-wrap: wrap; border: 1px solid var(--rule); }
+  .cover-meta { display: flex; gap: 0; flex-wrap: wrap; border: 1px solid var(--rule); width: 100%; }
   .cover-meta-item { padding: 14px 24px; border-right: 1px solid var(--rule); }
   .cover-meta-item:last-child { border-right: none; }
   .cover-meta-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
@@ -169,10 +169,244 @@
   footer { padding:24px 48px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
   footer p { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:0.12em; }
 
-  /* FADE IN */
+  /* ── KEYFRAMES ── */
+  @keyframes pulse       { 0%,100%{opacity:0.1} 50%{opacity:0.5} }
+  @keyframes progressBar { from{width:0} to{width:var(--target,100%)} }
+  @keyframes dotPop      { 0%{transform:scale(1)} 50%{transform:scale(1.9)} 100%{transform:scale(1.6)} }
+  @keyframes fadeUp      { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeLeft    { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes lineGrow    { from{width:0;opacity:0} to{opacity:0.4} }
+  @keyframes barGrow     { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+  @keyframes accentPulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,0)} 50%{box-shadow:0 0 12px 2px rgba(245,166,35,0.18)} }
+  @keyframes countUp     { from{opacity:0;transform:translateY(10px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes shimmer     { 0%{opacity:0.03} 50%{opacity:0.07} 100%{opacity:0.03} }
+
+  /* ── SLIDE FADE-IN (base) ── */
   @media (prefers-reduced-motion: no-preference) {
-    .slide-inner,.divider-inner { opacity:0; transform:translateY(18px); transition:opacity 0.6s ease,transform 0.6s ease; }
-    .slide-inner.visible,.divider-inner.visible { opacity:1; transform:translateY(0); }
+    .slide-inner, .divider-inner {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+    }
+    .slide-inner.visible, .divider-inner.visible { opacity:1; transform:translateY(0); }
+
+    /* Staggered children when slide becomes visible */
+    .slide-inner.visible .eyebrow        { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+    .slide-inner.visible .section-title  { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
+    .slide-inner.visible .cover-title    { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.08s both; }
+    .slide-inner.visible .section-desc   { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+    .slide-inner.visible .cover-sub      { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.18s both; }
+    .slide-inner.visible .cover-meta     { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .two-col        { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .three-col      { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+    .slide-inner.visible .stat-row       { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.35s both; }
+    .slide-inner.visible .quote-bar      { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+    .slide-inner.visible .insight-grid   { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    .slide-inner.visible .flow           { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    .slide-inner.visible .pillar         { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+
+    /* Eyebrow rule line grows in */
+    .slide-inner.visible .eyebrow::after {
+      animation: lineGrow 0.6s cubic-bezier(0.22,1,0.36,1) 0.3s both;
+    }
+
+    /* Stat numbers pop in with slight scale */
+    .slide-inner.visible .stat-num { animation: countUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.42s both; }
+
+    /* Cards slide in with micro-stagger */
+    .slide-inner.visible .card:nth-child(1) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    .slide-inner.visible .card:nth-child(2) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+    .slide-inner.visible .card:nth-child(3) { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.46s both; }
+
+    /* Cover accent rule drops in */
+    .slide-inner.visible .cover-rule {
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.0s both;
+    }
+
+    /* Active dot gets a pop */
+    .dot-wrap.active .dot { animation: dotPop 0.3s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* Amber accent bar on top of stat/metric cells pulses once on entry */
+    .slide-inner.visible .stat-cell::before,
+    .slide-inner.visible [style*="height:2px; background:var(--accent)"] {
+      animation: barGrow 0.5s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+      transform-origin: left;
+    }
+
+    /* Part 2 divider title */
+    .divider-inner.visible .divider-title { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both; }
+
+    /* Background ghost text — subtle shimmer when slide is visible */
+    .slide-inner.visible .bg-ghost { animation: shimmer 6s ease-in-out infinite; }
+
+    /* Progress bar — subtle glow on the leading edge */
+    #progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0;
+      width: 60px; height: 2px;
+      background: linear-gradient(to left, rgba(255,255,255,0.6), transparent);
+      pointer-events: none;
+    }
+
+    /* Card hover — lift */
+    .card {
+      transition: border-color 0.22s, background 0.22s, transform 0.22s, box-shadow 0.22s;
+    }
+    .card:hover {
+      border-color: rgba(245,166,35,0.25);
+      background: rgba(245,166,35,0.03);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* Insight item hover */
+    .insight-item {
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .insight-item:hover {
+      transform: translateY(-2px);
+      background: rgba(61,107,140,0.08);
+    }
+
+    /* Pillar hover — left border brightens */
+    .pillar { transition: border-color 0.22s; }
+    .pillar:hover { border-color: var(--accent); }
+    .pillar.p2:hover { border-color: var(--accent2); }
+
+    /* Stat cell hover */
+    .stat-cell { transition: background 0.2s; }
+    .stat-cell:hover { background: #111116; }
+
+    /* Flow node hover */
+    .flow-node {
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .flow-node:hover {
+      border-color: rgba(245,166,35,0.35);
+      transform: translateY(-2px);
+    }
+
+    /* Dot nav — smooth active transition */
+    .dot {
+      transition: background 0.25s, transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s;
+    }
+
+    /* Scroll hint pulse (already has animation, ensure smooth) */
+    .scroll-hint::after { animation: pulse 2.2s ease-in-out infinite; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — TABLET (max 900px)
+  ══════════════════════════════════════ */
+  @media (max-width: 900px) {
+    #top-nav { padding: 13px 20px; }
+    #top-nav .sub { display: none; }
+    .slide { padding: 90px 28px 52px; }
+    .slide-divider { padding: 48px 28px; }
+    .cover-meta { flex-direction: column; gap: 0; }
+    .cover-meta-item { border-right: none; border-bottom: 1px solid var(--rule); }
+    .cover-meta-item:last-child { border-bottom: none; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .phase-row { grid-template-columns: 80px 1fr; }
+    .phase-row > *:nth-child(3),
+    .phase-row > *:nth-child(4) { display: none; }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — MOBILE (max 600px)
+  ══════════════════════════════════════ */
+  @media (max-width: 600px) {
+    :root { --slide-w: 100%; }
+
+    /* Nav */
+    #top-nav { padding: 12px 16px; }
+    #dot-nav { right: 6px; gap: 10px; }
+    .dot { width: 5px; height: 5px; }
+    #dot-tip { display: none; }
+
+    /* Slide shell */
+    .slide { padding: 80px 18px 44px; min-height: auto; }
+    .slide-divider { padding: 40px 18px; min-height: auto; }
+    footer { padding: 20px 18px; flex-direction: column; align-items: flex-start; gap: 6px; }
+
+    /* Typography scale-down */
+    .eyebrow { font-size: 9px; letter-spacing: 0.16em; }
+    .section-desc { font-size: 13px; margin-bottom: 24px; }
+    .card-body, .pillar-body, .blist li, .insight-item p { font-size: 13px; }
+    .quote-bar p { font-size: 13px; }
+    .card-title { font-size: 16px; }
+    .pillar-title { font-size: 18px; }
+
+    /* Layout — all multi-col → single col */
+    .two-col   { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .three-col { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .four-col  { grid-template-columns: 1fr 1fr !important; }
+    .stat-row  { grid-template-columns: 1fr 1fr !important; }
+    .insight-grid { grid-template-columns: 1fr !important; }
+
+    /* Cover */
+    .cover-sub { font-size: 13px; }
+    .cover-meta { border: none; flex-direction: column; gap: 0; }
+    .cover-meta-item { padding: 10px 0; border-right: none; border-bottom: 1px solid var(--rule); }
+
+    /* Phase table — single col on mobile */
+    .phase-row { grid-template-columns: 1fr !important; }
+    .phase-row > * { display: block !important; }
+
+    /* Flow diagram — vertical */
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); align-self: center; }
+    .flow-node { min-width: unset; width: 100%; }
+
+    /* Stat cells — 2 col */
+    .stat-cell { padding: 22px 14px; }
+    .stat-num { font-size: 28px !important; }
+
+    /* Inline grid overrides for newer slides */
+    /* Smart routing / retries impact rows */
+    [style*="grid-template-columns: 160px 1fr 80px 1fr"] { display: flex !important; flex-direction: column !important; }
+    [style*="grid-template-columns:160px 1fr 80px 1fr"]  { display: flex !important; flex-direction: column !important; }
+
+    /* Coexistence bar */
+    [style*="grid-template-columns:1fr auto 1fr"] { display: flex !important; flex-direction: column !important; }
+    [style*="grid-template-columns: 1fr auto 1fr"] { display: flex !important; flex-direction: column !important; }
+
+    /* 3-cell impact rows with gap:1px background */
+    [style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns: 1fr 1fr !important; }
+    [style*="grid-template-columns: 1fr 1fr 1fr"] { grid-template-columns: 1fr 1fr !important; }
+
+    /* Mockup screens — stack vertically */
+    [style*="display:flex; gap:48px; justify-content:center"] { flex-direction: column !important; align-items: center !important; gap: 28px !important; }
+
+    /* Recognition SVG */
+    .slide-inner svg { max-width: 100%; height: auto; }
+
+    /* Optimization two-col cards */
+    [style*="gap:28px; margin-bottom:28px"] { grid-template-columns: 1fr !important; }
+    [style*="gap:28px; margin-bottom:24px"] { grid-template-columns: 1fr !important; }
+    [style*="gap:28px; margin-bottom:32px"] { grid-template-columns: 1fr !important; }
+
+    /* Cover meta strip */
+    [style*="display: flex; gap: 44px"] { flex-direction: column !important; gap: 12px !important; }
+
+    /* Part 2 divider */
+    .divider-inner { max-width: 100%; }
+
+    /* Inline font sizes in mockup screens */
+    .screen { padding: 12px 12px 16px !important; }
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE — VERY SMALL (max 380px)
+  ══════════════════════════════════════ */
+  @media (max-width: 380px) {
+    #dot-nav { display: none; }
+    .slide { padding: 72px 14px 36px; }
+    .four-col, .stat-row { grid-template-columns: 1fr !important; }
   }
 </style>
 </head>
@@ -481,7 +715,7 @@
     <h2 class="section-title">Guest vs. <span class="accent">Recognized</span> Consumer</h2>
     <p class="section-desc">The opt-in moment is the flywheel trigger — every consumer who saves their card becomes a recognized consumer on the next visit. Checkout time drops, auth rate rises, and processing cost falls simultaneously.</p>
 
-    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--rule); padding:28px 24px;">
+    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--rule); padding:28px 24px; overflow-x:auto;">
       <svg width="100%" viewBox="0 0 680 1000" role="img" style="display:block;">
         <title>Consumer checkout flow: guest vs recognized experience</title>
         <desc>Side-by-side swimlane comparing current guest checkout with new recognized consumer flow including opt-in moment and personalized wallet options.</desc>
@@ -1593,19 +1827,39 @@
     bar.style.width = pct + '%';
   }, { passive: true });
 
-  /* DOT NAV */
+  /* DOT NAV — scale gap when too many dots for viewport height */
+  function scaleDotNav() {
+    const nav = document.getElementById('dot-nav');
+    if (!nav) return;
+    const dots = nav.querySelectorAll('.dot-wrap');
+    const vh = window.innerHeight;
+    const totalNeeded = dots.length * 24 + (dots.length - 1) * 14;
+    if (totalNeeded > vh * 0.8) {
+      const newGap = Math.max(4, Math.floor((vh * 0.8 - dots.length * 16) / (dots.length - 1)));
+      nav.style.gap = newGap + 'px';
+      dots.forEach(d => { d.style.width = '16px'; d.style.height = '16px'; });
+    } else {
+      nav.style.gap = '';
+      dots.forEach(d => { d.style.width = ''; d.style.height = ''; });
+    }
+  }
+  scaleDotNav();
+  window.addEventListener('resize', scaleDotNav, { passive: true });
+
+  /* DOT NAV — tooltip and active state */
   const dots     = Array.from(document.querySelectorAll('.dot-wrap'));
   const tip      = document.getElementById('dot-tip');
   const sections = Array.from(document.querySelectorAll('section[id], div[id]'));
 
   dots.forEach(d => {
     d.addEventListener('mouseenter', () => {
+      if (!tip) return;
       const rect = d.getBoundingClientRect();
       tip.textContent = d.dataset.label;
       tip.style.top = (rect.top + rect.height / 2) + 'px';
       tip.classList.add('show');
     });
-    d.addEventListener('mouseleave', () => tip.classList.remove('show'));
+    d.addEventListener('mouseleave', () => tip && tip.classList.remove('show'));
   });
 
   const obs = new IntersectionObserver(entries => {
@@ -1614,14 +1868,22 @@
         dots.forEach(d => d.classList.toggle('active', d.getAttribute('href') === '#' + e.target.id));
       }
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.35 });
   sections.forEach(s => obs.observe(s));
 
   /* FADE IN */
   const fadeObs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.08 });
+  }, { threshold: 0.06 });
   document.querySelectorAll('.slide-inner, .divider-inner').forEach(el => fadeObs.observe(el));
+
+  /* TOUCH — smooth-scroll anchors on mobile */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
 </script>
 </body>
 </html>
