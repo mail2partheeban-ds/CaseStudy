@@ -430,7 +430,9 @@
   <a class="dot-wrap"     href="#analysis" data-label="Analysis"><span class="dot"></span></a>
   <a class="dot-wrap"     href="#smartrouting"  data-label="Smart Routing"><span class="dot"></span></a>
   <a class="dot-wrap"     href="#smartretries"  data-label="Smart Retries"><span class="dot"></span></a>
-  <a class="dot-wrap"     href="#metrics"  data-label="Metrics"><span class="dot"></span></a>
+  <a class="dot-wrap"     href="#richauth"      data-label="Rich Auth Data"><span class="dot"></span></a>
+  <a class="dot-wrap"     href="#tokenization"  data-label="Tokenization"><span class="dot"></span></a>
+  <a class="dot-wrap"     href="#metrics"       data-label="Metrics"><span class="dot"></span></a>
   <a class="dot-wrap"     href="#exec"     data-label="Exec Influence"><span class="dot"></span></a>
   <a class="dot-wrap p2-dot" href="#part2" data-label="Part 2: AI"><span class="dot"></span></a>
   <a class="dot-wrap p2-dot" href="#whyai" data-label="Why AI"><span class="dot"></span></a>
@@ -1422,49 +1424,344 @@
   </div>
 </section>
 
+<!-- ═══════════════════════ SLIDE: RICH AUTHORIZATION ═══════════════════════ -->
+<section class="slide slide-alt" id="richauth">
+  <div class="slide-inner">
+    <div class="eyebrow">Optimization Lever 03 &nbsp;·&nbsp; Card Processing</div>
+    <h2 class="section-title">Rich Authorization <span class="accent">Data</span></h2>
+    <p class="section-desc">Issuers decline because of uncertainty — they can't tell if a transaction is legitimate. More data shared at authorization time = less uncertainty = higher approval confidence. The merchant who shares the most wins on auth rate.</p>
+
+    <div class="two-col" style="gap:28px; margin-bottom:24px;">
+
+      <!-- LEFT: STATIC / BASELINE -->
+      <div style="border:1px solid var(--rule); background:rgba(255,255,255,0.02); overflow:hidden;">
+        <div style="background:rgba(255,255,255,0.04); border-bottom:1px solid var(--rule); padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div class="card-label" style="margin-bottom:4px;">Track 01 &nbsp;·&nbsp; Deployable Now</div>
+            <div class="card-title" style="font-size:22px;">Standard Auth Data</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); border:1px solid var(--rule); padding:4px 10px;">Baseline</div>
+        </div>
+        <div style="padding:22px 24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">What gets sent today</div>
+          <ul class="blist" style="margin-bottom:18px;">
+            <li>Raw PAN + expiry + CVV — manually entered, no context</li>
+            <li>Merchant name and MCC — static, not transaction-specific</li>
+            <li>Transaction amount and currency</li>
+            <li>Issuer receives minimal signal → defaults to risk-averse decline</li>
+          </ul>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+            <div style="padding:12px 14px; background:rgba(180,60,40,0.08); border:0.5px solid rgba(200,80,60,0.2); border-radius:4px;">
+              <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(200,80,60,0.7); margin-bottom:4px;">Auth Rate</div>
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--paper);">Baseline</div>
+            </div>
+            <div style="padding:12px 14px; background:rgba(180,60,40,0.08); border:0.5px solid rgba(200,80,60,0.2); border-radius:4px;">
+              <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(200,80,60,0.7); margin-bottom:4px;">Issuer Confidence</div>
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--paper);">Low</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px; background:rgba(255,255,255,0.03); border-left:2px solid var(--muted);">
+            <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;"><strong style="color:var(--paper); font-weight:400;">Root cause:</strong> Issuers are making risk decisions with minimal context. When uncertain, they decline. The solution is to give them more signal, not fight the decision after it happens.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: ENHANCED DATA -->
+      <div style="border:1px solid rgba(245,166,35,0.35); background:rgba(245,166,35,0.03); overflow:hidden;">
+        <div style="background:rgba(245,166,35,0.08); border-bottom:1px solid rgba(245,166,35,0.25); padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div class="card-label" style="margin-bottom:4px;">Track 02 &nbsp;·&nbsp; Enhanced Sharing</div>
+            <div class="card-title" style="font-size:22px;">Rich Authorization Data</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); border:1px solid rgba(245,166,35,0.4); padding:4px 10px;">High Impact</div>
+        </div>
+        <div style="padding:22px 24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:12px;">Additional context sent at auth time</div>
+          <ul class="blist" style="margin-bottom:18px;">
+            <li><strong style="color:var(--paper); font-weight:400;">Device fingerprint + IP intelligence</strong> — tells issuer the device is known, trusted, and consistent with prior transactions</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Consumer behavioral signals</strong> — velocity, session length, navigation pattern — signals a real human, not a bot</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Merchant performance data</strong> — historical chargeback rate, dispute ratio, merchant tenure — issuer calibrates risk per merchant</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Visa Advanced Authorization (VAA) / Mastercard Decision Intelligence</strong> — network-level real-time risk score enriching the auth request before it reaches the issuer</li>
+            <li><strong style="color:var(--paper); font-weight:400;">3DS2 frictionless flow</strong> — browser + device data passed silently to issuer ACS; frictionless authentication without a consumer-facing challenge</li>
+          </ul>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+            <div style="padding:12px 14px; background:rgba(46,125,94,0.1); border:0.5px solid rgba(46,125,94,0.3); border-radius:4px;">
+              <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(46,125,94,0.9); margin-bottom:4px;">Auth Rate Lift</div>
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--white);">+2–5 pts</div>
+            </div>
+            <div style="padding:12px 14px; background:rgba(46,125,94,0.1); border:0.5px solid rgba(46,125,94,0.3); border-radius:4px;">
+              <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(46,125,94,0.9); margin-bottom:4px;">Issuer Confidence</div>
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--white);">High</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px; background:rgba(245,166,35,0.05); border-left:2px solid var(--accent);">
+            <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;"><strong style="color:var(--paper); font-weight:400;">Liability shift bonus:</strong> 3DS2 authenticated transactions shift chargeback liability to the issuer — lower dispute cost is a direct P&L benefit on top of the auth rate improvement.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- IMPACT ROW -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule);">
+      <div style="background:#0A0A0C; padding:20px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:6px;">Auth Rate Improvement</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--white); line-height:1; margin-bottom:4px;"><span class="accent">+2–5</span> pts</div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300;">Industry benchmark for rich data vs. standard auth</div>
+      </div>
+      <div style="background:#0A0A0C; padding:20px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:6px;">Revenue Impact</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--white); line-height:1; margin-bottom:4px;"><span class="accent">$4.8–12M</span></div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300;">At 2–5pt lift × $220 ASP × 1M txns/day</div>
+      </div>
+      <div style="background:#0A0A0C; padding:20px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:6px;">Additional Benefit</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--white); line-height:1; margin-bottom:4px;"><span class="accent">Liability</span></div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300;">3DS2 shifts chargeback liability to issuer — direct P&amp;L win</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ SLIDE: NETWORK TOKENIZATION ═══════════════════════ -->
+<section class="slide slide-dark" id="tokenization">
+  <div class="slide-inner">
+    <div class="eyebrow">Optimization Lever 04 &nbsp;·&nbsp; Card Processing</div>
+    <h2 class="section-title">Network <span class="accent">Tokenization</span></h2>
+    <p class="section-desc">Visa Token Service (VTS) and Mastercard MDES replace the raw PAN with a network-issued token carrying cryptographic proof of the transaction context. The token tells the issuer: <em style="color:var(--paper);">this is a verified device, a known merchant, a trusted session.</em></p>
+
+    <!-- HOW IT WORKS ROW -->
+    <div style="display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:0; background:var(--rule); margin-bottom:28px; align-items:stretch;">
+
+      <div style="background:#0A0A0C; padding:20px 18px; text-align:center;">
+        <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">01</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.04em; color:var(--white); margin-bottom:6px;">Consumer Pays</div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300; line-height:1.5;">Raw PAN entered once or wallet used</div>
+      </div>
+      <div style="background:#060609; display:flex; align-items:center; justify-content:center; padding:0 10px;">
+        <span style="font-family:'DM Mono',monospace; font-size:14px; color:var(--accent);">→</span>
+      </div>
+      <div style="background:#0A0A0C; padding:20px 18px; text-align:center; border-left:2px solid var(--accent);">
+        <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">02</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.04em; color:var(--white); margin-bottom:6px;">Token Issued</div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300; line-height:1.5;">Visa VTS / MC MDES issues a token scoped to merchant + device</div>
+      </div>
+      <div style="background:#060609; display:flex; align-items:center; justify-content:center; padding:0 10px;">
+        <span style="font-family:'DM Mono',monospace; font-size:14px; color:var(--accent);">→</span>
+      </div>
+      <div style="background:#0A0A0C; padding:20px 18px; text-align:center; border-left:2px solid var(--accent);">
+        <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">03</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.04em; color:var(--white); margin-bottom:6px;">Auth Request</div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300; line-height:1.5;">Token + cryptogram sent — PAN never travels the network</div>
+      </div>
+      <div style="background:#060609; display:flex; align-items:center; justify-content:center; padding:0 10px;">
+        <span style="font-family:'DM Mono',monospace; font-size:14px; color:var(--accent);">→</span>
+      </div>
+      <div style="background:rgba(46,125,94,0.1); padding:20px 18px; text-align:center; border-left:2px solid rgba(46,125,94,0.6);">
+        <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(46,125,94,0.9); margin-bottom:8px;">04</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.04em; color:var(--white); margin-bottom:6px;">Issuer Approves</div>
+        <div style="font-size:12px; color:var(--muted); font-weight:300; line-height:1.5;">Higher confidence → higher approval rate</div>
+      </div>
+
+    </div>
+
+    <div class="two-col" style="gap:28px; margin-bottom:24px;">
+
+      <!-- LEFT: PAN-BASED -->
+      <div style="border:1px solid var(--rule); background:rgba(255,255,255,0.02); overflow:hidden;">
+        <div style="background:rgba(255,255,255,0.04); border-bottom:1px solid var(--rule); padding:16px 22px; display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div class="card-label" style="margin-bottom:4px;">Current State</div>
+            <div class="card-title" style="font-size:20px;">Raw PAN Processing</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(200,80,60,0.8); border:1px solid rgba(200,80,60,0.3); padding:4px 10px;">Higher Risk</div>
+        </div>
+        <div style="padding:20px 22px;">
+          <ul class="blist" style="margin-bottom:16px;">
+            <li>16-digit PAN travels across the network — exposed at every hop</li>
+            <li>No cryptographic proof of device or merchant context — issuer must guess legitimacy</li>
+            <li>Card-not-present fraud risk is fully on the merchant — chargebacks land in your P&L</li>
+            <li>PAN reuse: same credential works on any merchant — stolen cards have full utility</li>
+            <li>Auth rate suppressed — issuers apply conservative risk thresholds to unverified PANs</li>
+          </ul>
+          <div style="padding:12px 14px; background:rgba(180,60,40,0.08); border-left:2px solid rgba(200,80,60,0.4);">
+            <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;"><strong style="color:var(--paper); font-weight:400;">At scale:</strong> PCI DSS compliance cost, fraud monitoring overhead, and suppressed auth rate are all direct costs of raw PAN processing.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: TOKENIZED -->
+      <div style="border:1px solid rgba(245,166,35,0.35); background:rgba(245,166,35,0.03); overflow:hidden;">
+        <div style="background:rgba(245,166,35,0.08); border-bottom:1px solid rgba(245,166,35,0.25); padding:16px 22px; display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div class="card-label" style="margin-bottom:4px;">Tokenized State &nbsp;·&nbsp; VTS / MDES</div>
+            <div class="card-title" style="font-size:20px;">Network Token Processing</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); border:1px solid rgba(245,166,35,0.4); padding:4px 10px;">Higher Auth</div>
+        </div>
+        <div style="padding:20px 22px;">
+          <ul class="blist" style="margin-bottom:16px;">
+            <li><strong style="color:var(--paper); font-weight:400;">Token scoped to merchant + device</strong> — a stolen token is useless anywhere else. Fraud vector eliminated.</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Cryptographic transaction proof</strong> — each auth request carries a unique cryptogram. Issuer can verify the exact device and context, not just the credential.</li>
+            <li><strong style="color:var(--paper); font-weight:400;">PAN never travels the network</strong> — reduces PCI DSS scope significantly, lower compliance cost.</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Automatic card lifecycle management</strong> — token stays valid even when the underlying card is reissued. Fewer involuntary declines from expired/replaced cards.</li>
+            <li><strong style="color:var(--paper); font-weight:400;">Apple Pay / PayPal / vaulted cards</strong> all run on network tokens — recognition flywheel built on this foundation.</li>
+          </ul>
+          <div style="padding:12px 14px; background:rgba(245,166,35,0.05); border-left:2px solid var(--accent);">
+            <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;"><strong style="color:var(--paper); font-weight:400;">The recognition link:</strong> The opt-in vault built in the consumer experience slide tokenizes at this layer. Consumer recognition + network tokenization are one compounding flywheel.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- IMPACT ROW -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+      <div style="background:#0A0A0C; padding:18px 18px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:5px;">Auth Rate Lift</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--white); line-height:1; margin-bottom:3px;"><span class="accent">+3–6</span> pts</div>
+        <div style="font-size:11px; color:var(--muted); font-weight:300;">Token vs. raw PAN — industry benchmark</div>
+      </div>
+      <div style="background:#0A0A0C; padding:18px 18px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:5px;">Revenue Impact</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--white); line-height:1; margin-bottom:3px;"><span class="accent">$7.2M+</span></div>
+        <div style="font-size:11px; color:var(--muted); font-weight:300;">3pt lift × $220 ASP × 1M txns/day</div>
+      </div>
+      <div style="background:#0A0A0C; padding:18px 18px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:5px;">Fraud Reduction</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--white); line-height:1; margin-bottom:3px;"><span class="accent">Material</span></div>
+        <div style="font-size:11px; color:var(--muted); font-weight:300;">Token scope eliminates card reuse attack surface</div>
+      </div>
+      <div style="background:#0A0A0C; padding:18px 18px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); transform-origin:left;"></div>
+        <div class="card-label" style="margin-bottom:5px;">Involuntary Declines</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--white); line-height:1; margin-bottom:3px;"><span class="accent">↓ 30%+</span></div>
+        <div style="font-size:11px; color:var(--muted); font-weight:300;">Auto lifecycle mgmt — no expired card declines</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ═══════════════════════ SLIDE 6 — METRICS ═══════════════════════ -->
 <section class="slide slide-alt" id="metrics">
   <div class="slide-inner">
     <div class="eyebrow">Measurement Framework</div>
-    <h2 class="section-title">North Star Metrics — <span class="accent">Before</span> You Build</h2>
-    <p class="section-desc">The most common failure mode: teams deploy changes and then figure out how to measure them. I establish the metric framework first — this is how I led the PXR (Perfect XO Rate) definition at PayPal, before a single experiment ran.</p>
+    <h2 class="section-title">Metric <span class="accent">Hierarchy</span></h2>
+    <p class="section-desc">One North Star. Three L1 drivers that move it directly. Supporting L2 diagnostics that explain the why — baselined before any change ships to production.</p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin-bottom:32px;">
-      <div style="background:var(--ink);padding:26px 28px;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
-        <div class="card-label" style="margin-bottom:8px;">North Star 01</div>
-        <div class="card-title" style="font-size:20px;margin-bottom:8px;">Effective Cost Per Transaction</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;">(interchange + network + processor) / total_txns</div>
-        <div style="font-size:14px;color:var(--muted);font-weight:300;">The true all-in cost per transaction. Not the rate card — the realized cost after fees, FX, and retries. This is the metric CFOs care about.</div>
+    <!-- NORTH STAR -->
+    <div style="border:1px solid var(--accent); background:rgba(245,166,35,0.06); padding:24px 28px; margin-bottom:20px; position:relative; display:flex; align-items:center; gap:28px;">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent);"></div>
+      <div style="flex-shrink:0;">
+        <div class="card-label" style="margin-bottom:4px;">North Star</div>
+        <div class="card-title" style="font-size:28px; color:var(--white);">Incremental Revenue &amp; Margin</div>
       </div>
-      <div style="background:var(--ink);padding:26px 28px;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
-        <div class="card-label" style="margin-bottom:8px;">North Star 02</div>
-        <div class="card-title" style="font-size:20px;margin-bottom:8px;">Net Authorization Rate</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;">successful_auths / total_auth_attempts (by processor × BIN)</div>
-        <div style="font-size:14px;color:var(--muted);font-weight:300;">Auth rate is revenue. Every declined transaction that could have been routed differently is lost GMV. At $220 ASP × 1M/day, 1% lift = <strong style="color:var(--accent);font-weight:400;">$2.4M/year</strong>.</div>
+      <div style="width:1px; height:48px; background:rgba(245,166,35,0.3); flex-shrink:0;"></div>
+      <div style="font-size:14px; color:var(--muted); font-weight:300; line-height:1.7; flex:1;">The single metric that ties every processing decision to business value. Every basis point of auth rate improvement and every cent of ECPT reduction compounds directly into this number at $220 ASP × 1M transactions/day.</div>
+    </div>
+
+    <!-- L1 METRICS — 3 cards -->
+    <div class="card-label" style="margin-bottom:10px;">L1 Metrics — Primary Drivers</div>
+    <div class="three-col" style="gap:1px; background:var(--rule); margin-bottom:20px;">
+      <div style="background:#0A0A0C; padding:22px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:rgba(30,158,117,0.7);"></div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(30,158,117,0.9); margin-bottom:8px;">L1 · 01</div>
+        <div class="card-title" style="font-size:20px; margin-bottom:6px;">Conversion Rate</div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-bottom:8px;">checkout_completions / checkout_initiations</div>
+        <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;">Every 1% lift = <strong style="color:var(--accent); font-weight:400;">$2.4M/year</strong> at this scale. The consumer experience track owns this metric.</div>
       </div>
-      <div style="background:#0E0E12;padding:26px 28px;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
-        <div class="card-label" style="margin-bottom:8px;">North Star 03</div>
-        <div class="card-title" style="font-size:20px;margin-bottom:8px;">Transaction Velocity</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;">p50 / p95 latency: initiation → settlement confirmation</div>
-        <div style="font-size:14px;color:var(--muted);font-weight:300;">Latency is the invisible conversion killer. At PayPal, we found every 100ms of checkout latency drove measurable drop-off. Same principle applies at the payments infrastructure layer.</div>
+      <div style="background:#0A0A0C; padding:22px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:rgba(30,158,117,0.7);"></div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(30,158,117,0.9); margin-bottom:8px;">L1 · 02</div>
+        <div class="card-title" style="font-size:20px; margin-bottom:6px;">Authorization Rate</div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-bottom:8px;">successful_auths / total_auth_attempts</div>
+        <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;">Every 1% lift = <strong style="color:var(--accent); font-weight:400;">$2.4M/year</strong> in recovered GMV. Smart routing, retries, and rich auth data all move this.</div>
       </div>
-      <div style="background:#0E0E12;padding:26px 28px;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);"></div>
-        <div class="card-label" style="margin-bottom:8px;">North Star 04</div>
-        <div class="card-title" style="font-size:20px;margin-bottom:8px;">Routing Stability Score</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;">1 − (fallback_routes / total_routes)</div>
-        <div style="font-size:14px;color:var(--muted);font-weight:300;">How often does the system fall back to a secondary processor? High instability = hidden cost + latency. Establishes a pre-AI baseline for the future routing model.</div>
+      <div style="background:#0A0A0C; padding:22px 22px; position:relative;">
+        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:rgba(30,158,117,0.7);"></div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(30,158,117,0.9); margin-bottom:8px;">L1 · 03</div>
+        <div class="card-title" style="font-size:20px; margin-bottom:6px;">Cost Per Transaction</div>
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-bottom:8px;">(interchange + network + processor) / total_txns</div>
+        <div style="font-size:13px; color:var(--muted); font-weight:300; line-height:1.6;">Every 10bps reduction = <strong style="color:var(--accent); font-weight:400;">~$800K/year</strong>. Routing + tokenization + negotiation are the levers.</div>
       </div>
     </div>
 
-    <div style="border:1px solid var(--rule);padding:16px 24px;display:flex;align-items:center;gap:20px;background:rgba(255,255,255,0.015);">
-      <span class="mono-label" style="white-space:nowrap;">Key Principle</span>
-      <span style="width:1px;height:20px;background:var(--rule);flex-shrink:0;"></span>
-      <span style="font-size:14px;color:var(--paper);font-weight:300;">All four metrics must be baselined before any routing change ships to production — the same pre-measurement discipline that made PayPal's XO program credible to executive stakeholders.</span>
+    <!-- L2 TABLE -->
+    <div class="card-label" style="margin-bottom:10px;">L2 Metrics — Supporting Diagnostics</div>
+    <div style="border:1px solid var(--rule); overflow:hidden;">
+      <!-- Table header -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#060609; padding:10px 14px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted);">L2 Metric</div>
+        <div style="background:#060609; padding:10px 14px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(30,158,117,0.8);">→ Conversion Rate</div>
+        <div style="background:#060609; padding:10px 14px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(30,158,117,0.8);">→ Auth Rate</div>
+        <div style="background:#060609; padding:10px 14px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(30,158,117,0.8);">→ Cost / Txn</div>
+      </div>
+      <!-- Row 1 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Page latency</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">P50/P95 — 100ms = measurable drop-off</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+      </div>
+      <!-- Row 2 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Funnel drop-off</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">By step, device, region</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+      </div>
+      <!-- Row 3 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Token / vault coverage</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Recognized consumer % → 1-tap checkout</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Higher auth (tokenized &gt; manual PAN)</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Wallet routing → lower interchange</div>
+      </div>
+      <!-- Row 4 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Soft decline rate</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Primary routing optimization signal</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+      </div>
+      <!-- Row 5 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Retry recovery rate</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">% soft declines recovered per smart retry</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Retry cost / recovered transaction</div>
+      </div>
+      <!-- Row 6 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">3DS2 frictionless %</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Rich auth data quality signal</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Liability shift to issuer → lower dispute cost</div>
+      </div>
+      <!-- Row 7 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Routing stability</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Fallback rate → hidden cost indicator</div>
+      </div>
+      <!-- Row 8 -->
+      <div style="display:grid; grid-template-columns:180px 1fr 1fr 1fr; gap:1px; background:var(--rule);">
+        <div style="background:#0E0E12; padding:12px 14px; font-size:13px; font-weight:400; color:var(--paper);">Interchange + FX cost</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300; opacity:0.3;">—</div>
+        <div style="background:#0A0A0C; padding:12px 14px; font-size:13px; color:var(--muted); font-weight:300;">Net per txn by BIN, MCC, geography</div>
+      </div>
     </div>
+
   </div>
 </section>
 
